@@ -357,6 +357,22 @@ struct GdiplusStartupInput {
     bool suppressExternalCodecs; // SuppressExternalCodecs
 };
 
+// 登录设备信息
+struct LoginDeviceInfo {
+    char* qqVersion; // QQ版本号
+    int32_t appId; // QQappid
+    char* imsi; // imsi
+    char* imei; // imei
+    char* androidId; // AndroidId
+    char* bssId; // BssId
+    char* mac; // Mac
+    char* guid; // Guid
+    char* ssId; // SsId
+    char* deviceBrand; // 设备品牌
+    char* deviceModel; // 设备型号
+    int32_t protocolType; // 登录协议类型
+};
+
 // 收藏表情信息
 struct FavEmoticonInfo {
     char* emoticonGuid; // 表情GUID

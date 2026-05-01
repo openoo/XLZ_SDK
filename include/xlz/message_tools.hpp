@@ -3,6 +3,9 @@
 #include "xlz/text_code.hpp"
 #include <cstdint>
 #include <string>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <unknwn.h>
 namespace xlz {
 // 消息数据辅助工具。框架回调传入结构体地址，这里复制为 C++ 结构体快照。
 class MessageTools {

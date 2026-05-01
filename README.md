@@ -15,9 +15,18 @@
 
 ## 快速开始
 
+小栗子常见宿主是 32 位进程，优先构建 Win32 DLL：
+
 ```powershell
 cmake -S . -B build -A Win32
 cmake --build build --config Release
+```
+
+如宿主明确是 64 位，可构建 x64：
+
+```powershell
+cmake -S . -B build-x64 -A x64
+cmake --build build-x64 --config Release
 ```
 
 示例插件见 `examples/basic_plugin.cpp`。
