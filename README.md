@@ -31,6 +31,8 @@ cmake --build build-x64 --config Release
 
 示例插件见 `examples/basic_plugin.cpp`。
 
+示例插件的初始化返回格式已经按小白兔可加载插件的格式处理：入口只导出 `appload`，权限申请的 `needapilist` 每项只包含 `desc` 字段。不要随意向该对象追加非框架文档字段，否则部分宿主会提示“初始化函数返回值格式错误”。
+
 ## 文档
 
 - `docs/开发指南.md`

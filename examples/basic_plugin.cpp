@@ -21,22 +21,19 @@ XLZ_PLUGIN_EXPORT const char* XLZ_PLUGIN_CALL appload(const char* apidata, const
     catch (const std::exception& e) { ShowError("解析小栗子 API 数据失败", e); }
 
     xlz::AppInfo info;
-    info.SetAppName("XLZ C++ SDK 示例插件");
+    info.SetAppName("XLZ SDK Demo");
     info.SetAuthor("openoo");
     info.SetVersion("1.0.0");
-    info.SetDescription("使用 XLZ_SDK 构建的小栗子 C++ 插件示例");
+    info.SetDescription("XLZ C++ SDK demo plugin");
     info.SetEnableHandler(&AppStart);
     info.SetDisableHandler(&AppEnd);
     info.SetSettingsHandler(&ControlPanel);
     info.SetPrivateMsgHandler(&OnPrivate);
     info.SetGroupMsgHandler(&OnGroup);
-    info.AddPermissionRequest("输出日志", "示例插件输出运行日志");
-    info.AddPermissionRequest("发送群消息", "收到测试命令后回复群消息");
-    info.AddPermissionRequest("发送好友消息", "收到测试命令后回复好友消息");
+    info.AddAllPermissions("XLZ SDK demo plugin permission");
     return info.GetData();
 }
 
-XLZ_PLUGIN_EXPORT const char* XLZ_PLUGIN_CALL apprun(const char* apidata, const char* pluginkey) { return appload(apidata, pluginkey); }
 XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL AppStart() { try { g_plugin_data_dir = g_api.GetPluginDataDir(); g_api.OutLog("XLZ C++ SDK 示例插件已启用"); } catch (const std::exception& e) { ShowError("插件启用失败", e); } return xlz::ENABLE_RESPONSE_SUCCESS; }
 XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL AppEnd() { return 0; }
 XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL ControlPanel() { MessageBoxA(nullptr, g_plugin_data_dir.c_str(), "插件数据目录", MB_OK); return 0; }

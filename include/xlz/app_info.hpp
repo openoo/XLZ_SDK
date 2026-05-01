@@ -16,7 +16,6 @@ class AppInfo {
     template <typename T> void SetHandler(const int index, T function) { addresses_[index] = reinterpret_cast<std::uintptr_t>(function); }
     static std::string EscapeString(const std::string& input);
     static void ProcessAppName(std::string& appName);
-    static bool IsDangerousPermission(const std::string& apiName);
 public:
     AppInfo();
     void SetAppName(const std::string& appName);

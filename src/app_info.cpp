@@ -4,7 +4,6 @@
 #include "xlz/metadata.hpp"
 
 #include <algorithm>
-#include <unordered_set>
 
 namespace xlz {
 
@@ -41,16 +40,6 @@ std::string AppInfo::EscapeString(const std::string& input) {
     return output;
 }
 
-bool AppInfo::IsDangerousPermission(const std::string& apiName) {
-    static const std::unordered_set<std::string> dangerous = {
-        "QQ点赞", "获取clientkey", "获取pskey", "获取skey", "解散群", "删除好友",
-        "退群", "置屏蔽好友", "修改个性签名", "修改昵称", "上传头像", "框架重启",
-        "取QQ钱包个人信息", "更改群聊消息内容", "更改私聊消息内容", "下线指定QQ",
-        "登录指定QQ", "修改指定QQ缓存密码", "获取bkn_gtk", "取sessionkey"
-    };
-    return dangerous.count(apiName) != 0;
-}
-
 void AppInfo::SetAppName(const std::string& appName) {
     app_name_ = appName;
     ProcessAppName(app_name_);
@@ -64,10 +53,9 @@ void AppInfo::AddPermissionRequest(const std::int32_t permission, const std::str
 
 void AppInfo::AddPermissionRequest(const std::string& apiName, const std::string& reason) {
     if (apiName.empty() || reason.empty()) return;
-    const char* safe = IsDangerousPermission(apiName) ? "0" : "1";
+    // 小栗子/小白兔对 needapilist 的格式校验较严格。
+    // 这里保持与已验证可加载的 C++ 插件一致：每个权限只写 desc 字段。
     permissions_ << "\"" << EscapeString(apiName) << "\":{"
-                 << "\"state\":\"" << safe << "\","
-                 << "\"safe\":\"" << safe << "\","
                  << "\"desc\":\"" << EscapeString(reason) << "\"},";
 }
 
