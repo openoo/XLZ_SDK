@@ -8,5 +8,6 @@
 #include "xlz/text_code.hpp"
 #include "xlz/message_tools.hpp"
 #include "xlz/api.hpp"
+#include "xlz/generated_api.hpp"
 #include "xlz/app_info.hpp"
 #include "xlz/plugin_exports.hpp"
