@@ -81,6 +81,10 @@ std::string SafeText(const char* value) {
     return value == nullptr ? std::string{} : std::string(value);
 }
 
+std::string FrameworkText(const char* value) {
+    return xlz::gbk2utf8(SafeText(value));
+}
+
 void ShowError(const char* title, const std::exception& e) {
     AddLog(std::string(title) + ": " + e.what());
     MessageBoxW(g_window, Utf8ToWide(e.what()).c_str(), Utf8ToWide(title).c_str(), MB_OK | MB_ICONERROR);
@@ -94,7 +98,7 @@ void RefreshStatus() {
 
     if (g_api.initialized()) {
         try {
-            text << " | 框架QQ: " << SafeText(g_api.GetFrameworkQQ());
+            text << " | 框架QQ: " << FrameworkText(g_api.GetFrameworkQQ());
         } catch (const std::exception& e) {
             text << " | 框架QQ获取失败: " << e.what();
         }
@@ -110,7 +114,7 @@ void SendTestLog() {
     try {
         const std::string gbk = xlz::utf82gbk("XLZ SDK UI 测试日志");
         const char* result = g_api.OutLog(gbk.c_str());
-        AddLog("输出日志 API 返回: " + SafeText(result));
+        AddLog("输出日志 API 返回: " + FrameworkText(result));
     } catch (const std::exception& e) {
         ShowError("输出日志 API 调用失败", e);
     }
@@ -267,10 +271,11 @@ XLZ_PLUGIN_EXPORT const char* XLZ_PLUGIN_CALL appload(const char* apidata, const
 
 XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL AppStart() {
     try {
-        g_plugin_data_dir = g_api.GetPluginDataDir();
+        g_plugin_data_dir = FrameworkText(g_api.GetPluginDataDir());
         const std::string gbk = xlz::utf82gbk("XLZ C++ SDK 示例插件已启用");
-        g_api.OutLog(gbk.c_str());
+        const char* result = g_api.OutLog(gbk.c_str());
         AddLog("插件已启用，数据目录: " + g_plugin_data_dir);
+        AddLog("启用日志 API 返回: " + FrameworkText(result));
     } catch (const std::exception& e) {
         ShowError("插件启用失败", e);
     }
@@ -296,7 +301,7 @@ XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL ControlPanel() {
 XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL OnPrivate(std::int32_t data_ptr) {
     xlz::PrivateMessageData data{};
     xlz::MessageTools::ReadPrivateMessage(data_ptr, data);
-    AddLog("收到私聊消息: sender=" + std::to_string(data.senderQQ) + " content=" + xlz::gbk2utf8(SafeText(data.content)));
+    AddLog("收到私聊消息: sender=" + std::to_string(data.senderQQ) + " content=" + FrameworkText(data.content));
     if (data.content != nullptr && xlz::str_equal(xlz::gbk2utf8(data.content).c_str(), "C++ Test")) {
         const std::string reply = xlz::utf82gbk("XLZ C++ SDK 正常运行");
         g_api.SendPrivateMessage(data.frameworkQQ, data.senderQQ, reply.c_str());
@@ -309,7 +314,7 @@ XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL OnPrivate(std::int32_t data_ptr) 
 XLZ_PLUGIN_EXPORT std::int32_t XLZ_PLUGIN_CALL OnGroup(std::int32_t data_ptr) {
     xlz::GroupMessageData data{};
     xlz::MessageTools::ReadGroupMessage(data_ptr, data);
-    AddLog("收到群消息: group=" + std::to_string(data.groupNumber) + " sender=" + std::to_string(data.senderQQ) + " content=" + xlz::gbk2utf8(SafeText(data.content)));
+    AddLog("收到群消息: group=" + std::to_string(data.groupNumber) + " sender=" + std::to_string(data.senderQQ) + " content=" + FrameworkText(data.content));
     if (data.content != nullptr && xlz::str_equal(xlz::gbk2utf8(data.content).c_str(), "C++ Test")) {
         const std::string reply = xlz::utf82gbk("XLZ C++ SDK 正常运行");
         g_api.SendGroupMessage(data.frameworkQQ, data.groupNumber, reply.c_str());
