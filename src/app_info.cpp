@@ -2,6 +2,7 @@
 
 #include "xlz/constants.hpp"
 #include "xlz/metadata.hpp"
+#include "xlz/utility.hpp"
 
 #include <algorithm>
 
@@ -86,7 +87,9 @@ const char* AppInfo::GetData() const {
     std::string apps = permissions_.str();
     if (!apps.empty() && apps.back() == ',') apps.pop_back();
     s << "\"data\":{\"needapilist\":{" << apps << "}}}";
-    result = s.str();
+    // 易语言宿主通常按 ANSI/GBK 读取插件返回文本；SDK 内部统一使用 UTF-8，
+    // 因此 appload 返回前需要转换，避免中文权限名无法被宿主识别。
+    result = utf82gbk(s.str());
     return result.c_str();
 }
 
