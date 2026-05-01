@@ -32,9 +32,7 @@ XLZ_PLUGIN_EXPORT const char* XLZ_PLUGIN_CALL appload(const char* apidata, const
     info.SetSettingsHandler(&ControlPanel);
     info.SetPrivateMsgHandler(&OnPrivate);
     info.SetGroupMsgHandler(&OnGroup);
-    info.AddPermissionRequest(xlz::PERMISSION_LOG_OUTPUT, "XLZ SDK demo log permission");
-    info.AddPermissionRequest(xlz::PERMISSION_SEND_FRIEND_MSG, "XLZ SDK demo friend message permission");
-    info.AddPermissionRequest(xlz::PERMISSION_SEND_GROUP_MSG, "XLZ SDK demo group message permission");
+    info.AddAllPermissions("XLZ SDK demo plugin permission");
     return info.GetData();
 }
 
